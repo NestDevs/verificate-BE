@@ -1,0 +1,13 @@
+/__pycache__/
+__pycache__
+venv/
+.vscode
+Pipfile
+.pytest_cache/
+
+# Coverage directory used by tools like istanbul
+coverage
+backend/.coverage
+
+# dotenv environment variables file
+.env
