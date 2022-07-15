@@ -8,6 +8,7 @@
 - [Run the FastAPI server](#run-the-fastapi-server)
 - [Pre-commit and lint the Backend](#pre-commit-and-lint-the-backend)
 - [Status](#status)
+- [Contributors](#contributors)
 - [Contributing to the project](#contributing-to-the-project)
 
 #
@@ -127,6 +128,12 @@ errors before pushing to the repository.
 > ## Status
 
 - This project is a work in progress and is currently under development.
+
+#
+
+> ## Contributors
+
+This Project was created by the members of NestDevs for the Nestcoin Hackaton.
 
 #
 
