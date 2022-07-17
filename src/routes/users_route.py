@@ -6,6 +6,5 @@ router = APIRouter()
 
 
 @router.post("/register",tags=["users"])
-def sign_up():
-    
-    return 
+async def sign_up(new_user:user):
+    return await register(new_user)

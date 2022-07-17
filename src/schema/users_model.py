@@ -11,7 +11,7 @@ class user(BaseModel):
     password: str = Field(min_length=7)
     email: EmailStr
     linked_in:str = Field(min_length=8)
-    skill:list[str]
+    skill: list[str]
     level:Level
     created_at: str = str(datetime.now(timezone.utc))
 

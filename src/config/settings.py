@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     PROJECT_NAME = "Verificate"
     MONGO_SERVER = os.getenv("MONGO_SERVER")
-    SECRET_KEY = os.getenv("SECRET_KEY")
+    #SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 settings = Settings()
