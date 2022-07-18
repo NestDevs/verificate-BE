@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
-from src.controller.users_controls import login, register, verifier_login
-from src.schema.users_model import User, User_login, Verifier
+from src.controller.users_controls import login, register, set_result, verifier_login
+from src.schema.users_model import Test_results, User, User_login, Verifier
 from src.utils.auth import verify_user, verify_user2
 
 router = APIRouter()
@@ -23,6 +23,13 @@ async def sign_in(details: User_login):
 @router.get("/profile", tags=["users"])
 async def user_profile(current_user=Depends(verify_user)):
     return current_user
+
+
+# category
+@router.post("/profile/{email}/{category}")
+async def test_category(email, category, test_results: Test_results):
+    test_results.email = email
+    return set_result(category, test_results)
 
 
 # admin login

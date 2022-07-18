@@ -2,15 +2,24 @@ from datetime import datetime, timezone
 
 from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
-from src.schema.questions_model import Level
 
-
-class Skills(BaseModel):
+class lvls(BaseModel):
     """
-    models to hold list of users skills
+    true boolean if beginer exam is passed.
     """
 
-    skill: list[str] | None = None
+    BEGINNER: bool = False
+    INTERMEDIATE: bool = False
+    ADVANCED: bool = False
+
+
+class Test_results(BaseModel):
+    """
+    to hold eaxh categories test results
+    """
+
+    email: EmailStr
+    category: lvls
 
 
 class User(BaseModel):
@@ -23,8 +32,7 @@ class User(BaseModel):
     password: str = Field(min_length=7)
     email: EmailStr
     linked_in: HttpUrl
-    skill: Skills
-    level: Level
+    results: Test_results | None = None
     created_at: str = str(datetime.now(timezone.utc))
 
 

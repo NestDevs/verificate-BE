@@ -3,12 +3,13 @@ import json
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 
-from src.schema.users_model import User, User_login, Verifier
+from src.helper.response import ResponseModel
+from src.schema.users_model import User_login, Verifier
 from src.utils.auth import create_access_token, create_access_token2, hashed, verify_password
 from src.utils.functions import model
 
 
-async def register(user):
+async def register(Usr):
     """
     Register a user to collection.
 
@@ -17,13 +18,12 @@ async def register(user):
     User email on success.
     """
     try:
-        user = User().dict()
+        user = Usr.dict()
         check = await model.findone({"email": user["email"]}, "users_collection")
         if check is not None:
             return {"error: ": "user already exists"}
         user["password"] = hashed(user["password"])
         create_user = await model.create(jsonable_encoder(user), "users_collection")
-
         return (
             json.dumps(
                 {
@@ -115,3 +115,12 @@ async def verifier_login(verifier: Verifier):
         )
     except Exception:
         raise HTTPException(status_code=500, details="server error") from HTTPException(status_code=500)
+
+
+async def set_result(category_name, test_results):
+    """
+    if passed set the level to true.
+    """
+    result = {f"{category_name}": f"{test_results}"}
+    await model.create(result, "users_results_collection")
+    return ResponseModel.success(message="success")
