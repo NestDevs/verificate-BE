@@ -5,6 +5,14 @@ from pydantic import BaseModel, EmailStr, Field, HttpUrl
 from src.schema.questions_model import Level
 
 
+class Skills(BaseModel):
+    """
+    models to hold list of users skills
+    """
+
+    skill: list[str] | None = None
+
+
 class User(BaseModel):
     """
     Model to hold  user data.
@@ -15,7 +23,7 @@ class User(BaseModel):
     password: str = Field(min_length=7)
     email: EmailStr
     linked_in: HttpUrl
-    skill: list[str]
+    skill: Skills
     level: Level
     created_at: str = str(datetime.now(timezone.utc))
 
