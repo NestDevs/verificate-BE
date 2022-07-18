@@ -10,3 +10,4 @@ client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGO_SERVER)
 #  create database
 database = client["verificate"]
 users_collection = database.get_collection("users")
+verifiers_collection = database.get_collection("verifiers")

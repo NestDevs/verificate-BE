@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
 from src.schema.questions_model import Level
 
@@ -10,10 +10,11 @@ class User(BaseModel):
     Model to hold  user data.
     """
 
-    name: str = Field(min_length=10)
+    first_name: str = Field(min_length=10)
+    last_name: str = Field(min_length=10)
     password: str = Field(min_length=7)
     email: EmailStr
-    linked_in: str = Field(min_length=8)
+    linked_in: HttpUrl
     skill: list[str]
     level: Level
     created_at: str = str(datetime.now(timezone.utc))
