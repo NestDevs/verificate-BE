@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from enum import Enum
 from typing import List
+
 from pydantic import BaseModel, Field
 
 
@@ -11,26 +12,33 @@ class Level(str, Enum):
     INTERMEDIATE = "INTERMEDIATE"
     ADVANCED = "ADVANCED"
 
-class option(BaseModel):
-    a:str
-    b:str
-    c:str
-    d:str
 
-class test_question(BaseModel):
-    id:int
-    question:str
-    options: option
+class Option(BaseModel):
+    """Base model to hold answers data."""
+
+    a: str
+    b: str
+    c: str
+    d: str
+
+
+class Test_question(BaseModel):
+    """Base model to hold question data."""
+
+    id: int
+    question: str
+    options: Option
     answer: str
 
-class test(BaseModel):
-    """Base model to hold question data."""
+
+class Test(BaseModel):
+    """Base model to hold question meta data."""
 
     test_name: str = Field(min_length=5)
     skill_level: Level
     set_by: str
     uploaded_at: str = str(datetime.now(timezone.utc))
-    questions: List[test_question]
+    questions: List[Test_question]
 
     class Config:
         """question model configuration."""
@@ -44,4 +52,3 @@ class test(BaseModel):
                 "uploaded_at": "2022-04-22 22:38:33.075643",
             },
         }
-
