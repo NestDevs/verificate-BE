@@ -9,12 +9,12 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    """Class to hold application config values."""
+    """Class to hold application config values.""" 
 
     PROJECT_NAME = "Verificate"
     MONGO_SERVER = os.getenv("MONGO_SERVER")
     SECRET_KEY = os.getenv("SECRET_KEY")
-    INFURAL_URL = os.getenv("INFURAL_URL")
+    WEB3_PROVIDER_URL = os.getenv("WEB3_PROVIDER_URL")
     CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
     OWNER_ACCOUNT = os.getenv("OWNER_ACCOUNT")
     OWNER_ACCOUNT_PRIVATE_KEY = os.getenv("OWNER_ACCOUNT_PRIVATE_KEY")

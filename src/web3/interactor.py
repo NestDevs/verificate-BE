@@ -6,7 +6,7 @@ from src.config.settings import settings
 # Opening JSON file
 async def provider():
    verificate_abi = json.load(open('src/web3/abi/verificate.json'))
-   provider = Web3.HTTPProvider(settings.INFURAL_URL)
+   provider = Web3.HTTPProvider(settings.WEB3_PROVIDER_URL)
    web3 = Web3(provider)
    web3.isConnected()
    contract_address = web3.toChecksumAddress(settings.CONTRACT_ADDRESS)
