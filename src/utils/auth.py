@@ -12,7 +12,7 @@ hasher = CryptContext(schemes=["bcrypt"], deprecated=["auto"])
 
 
 def hashed(password: str):
-    hasher.hash(password)
+    return hasher.hash(password)
 
 
 def verify_password(plain_password: str, hashed_password: str):

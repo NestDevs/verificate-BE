@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
 
-class lvls(BaseModel):
+class Levels(BaseModel):
     """
     true boolean if beginer exam is passed.
     """
@@ -19,7 +19,7 @@ class Test_results(BaseModel):
     """
 
     email: EmailStr
-    category: lvls
+    category: Levels
 
 
 class User(BaseModel):
