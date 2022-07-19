@@ -35,7 +35,6 @@ async def register(user):
             "users",
         )
         return {
-            "user": user,
             "user_id": create_user.inserted_id,
             "success": True,
             "message": "User created successfully",
