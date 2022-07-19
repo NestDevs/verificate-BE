@@ -1,8 +1,21 @@
 from fastapi import APIRouter, Depends
 
-from src.controller.users_controls import login, register, set_result, verifier_login
-from src.schema.users_model import Test_results, User, User_login, Verifier
-from src.utils.auth import verify_user, verify_user2
+from src.controller.users_controls import (
+    login, 
+    register, 
+    set_result, 
+    verifier_login
+    )
+from src.schema.users_model import (
+    Test_results, 
+    User, 
+    User_login, 
+    Verifier
+    )
+from src.utils.auth import (
+    verify_user, 
+    verify_user2
+    )
 
 router = APIRouter()
 

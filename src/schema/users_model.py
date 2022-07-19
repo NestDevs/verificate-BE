@@ -1,26 +1,34 @@
 from datetime import datetime, timezone
+from enum import Enum
 
 from pydantic import BaseModel, EmailStr, Field, HttpUrl
 
+class Levels(str, Enum):
+    """ enum for skill level """
 
-class Levels(BaseModel):
-    """
-    true boolean if beginer exam is passed.
-    """
-
-    BEGINNER: bool = False
-    INTERMEDIATE: bool = False
-    ADVANCED: bool = False
-
+    BEGINNER = "BEGINNER"
+    INTERMEDIATE = "INTERMEDIATE"
+    ADVANCED = "ADVANCED"
+    
+class Result(str, Enum):
+    """ enum for test status"""
+    
+    FAILED = "FAILED"
+    PASSED = "PASSED"
 
 class Test_results(BaseModel):
     """
     to hold eaxh categories test results
     """
 
-    email: EmailStr
-    category: Levels
+    level: Levels
+    test_result: Result
+    score: int = 0
 
+class Test(BaseModel):
+    """ Model for the tests """
+    
+    language: list[Test_results]
 
 class User(BaseModel):
     """
@@ -32,9 +40,8 @@ class User(BaseModel):
     password: str = Field(min_length=7)
     email: EmailStr
     linked_in: HttpUrl
-    results: Test_results | None = None
+    results: dict[str, Test_results]
     created_at: str = str(datetime.now(timezone.utc))
-
 
 class User_login(BaseModel):
     """
