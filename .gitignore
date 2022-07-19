@@ -5,6 +5,7 @@ venv/
 .vscode
 Pipfile
 .pytest_cache/
+gitpod.yml
 
 # Coverage directory used by tools like istanbul
 coverage
