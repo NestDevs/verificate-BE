@@ -22,7 +22,10 @@ def upload_certificate_to_ipfs(file_path,file_name):
         Uploads a file to IPFS and returns the hash
         :param file_path:
         :return:
-            uploaded file hash
+            "success":True,
+            "ipfs_hash":nhowi284jolafhiiefnfia948fnbe09xjur3000a84bnvaa,
+            "pin_size":9.0 MB",
+            "time_stamp":2022-07-02 12:00:00.000
     """
     try:
 
@@ -36,18 +39,18 @@ def upload_certificate_to_ipfs(file_path,file_name):
         }
 
         response = requests.request("POST", PINATA_URL_PIN_FILE, headers=headers, data=payload, files=files)
-        return json.dumps({
+        return {
             "success":True,
-            "hash":response.json()["IpfsHash"],
-            "pinSize":f"{round(float(response.json()['PinSize'])/1024,3)} MB",
-            "timeStamp":convert_to_time(response.json()["Timestamp"])
-        })
+            "ipfs_hash":response.json()["IpfsHash"],
+            "pin_size":f"{round(float(response.json()['PinSize'])/1024,3)} MB",
+            "time_stamp":convert_to_time(response.json()["Timestamp"])
+        }
 
     except Exception as error:
-        res = json.dumps({
+        res = {
             "error": str(error),
             "success":False
-            })
+            }
         return res
 
 

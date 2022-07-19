@@ -14,6 +14,10 @@ class Settings(BaseSettings):
     PROJECT_NAME = "Verificate"
     MONGO_SERVER = os.getenv("MONGO_SERVER")
     SECRET_KEY = os.getenv("SECRET_KEY")
+    INFURAL_URL = os.getenv("INFURAL_URL")
+    CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
+    OWNER_ACCOUNT = os.getenv("OWNER_ACCOUNT")
+    OWNER_ACCOUNT_PRIVATE_KEY = os.getenv("OWNER_ACCOUNT_PRIVATE_KEY")
 
 
 settings = Settings()

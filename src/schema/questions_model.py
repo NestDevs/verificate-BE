@@ -94,10 +94,10 @@ class UpdateQuestion(BaseModel):
     """
     Base model to hold question data.
     """
-
-    question:Optional(str)
-    options: Optional(Option)
-    answer: Optional(str)
-    duration: Optional(float)
-    category:Optional(Category)
+    test_name: Optional[str] = Field(min_length=5)
+    question:Optional[str]
+    options: Optional[Option]
+    answer: Optional[str]
+    duration: Optional[float]
+    category:Optional[Category]
    
