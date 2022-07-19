@@ -5,10 +5,11 @@ from fastapi.encoders import jsonable_encoder
 from src.helper.response import ResponseModel
 from src.schema.users_model import User_login, Verifier
 from src.utils.auth import (
-    create_access_token, 
-    create_access_token2, 
-    hashed, verify_password
-    )
+    create_access_token,
+    create_access_token2,
+    hashed,
+    verify_password,
+)
 from src.utils.functions import model
 
 
@@ -20,6 +21,7 @@ async def register(user):
     -------
     User email on success.
     """
+
     try:
         check = await model.findone(
             {"email": user.email},
@@ -45,8 +47,9 @@ async def register(user):
             detail=error,
         ) from error
 
+
 async def login(load: User_login):
-    """ Login a test taker.
+    """Login a test taker.
     returns
     -------
     access token and user mail.
