@@ -48,7 +48,7 @@ async def verify_access_token(token: str, exeption_error):
         user_mail: str = payload.get("email")
 
         # verify if the user exists in the database
-        user_exist = await model.findOne({"email": user_mail}, "users_collection", {"password": 0})
+        user_exist = await model.findone({"email": user_mail}, "users_collection", {"password": 0})
 
         if user_exist is None:
             raise exeption_error
@@ -68,7 +68,7 @@ async def verify_access_token2(token: str, exeption_error):
         user_mail: str = payload.get("email")
 
         # verify if the user exists in the database
-        user_exist = await model.findOne({"email": user_mail}, "users_collection", {"password": 0})
+        user_exist = await model.findone({"email": user_mail}, "users_collection", {"password": 0})
 
         if user_exist is None:
             raise exeption_error

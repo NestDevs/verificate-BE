@@ -3,14 +3,14 @@ from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
 
 from src.helper.response import ResponseModel
-from src.schema.users_model import User_login, Verifier
+from src.schema.users_model import UserLogin, Verifier,UserAccess
 from src.utils.auth import (
     create_access_token,
     create_access_token2,
     hashed,
     verify_password,
 )
-from src.utils.functions import model
+from src.utils.functions import Model
 
 
 async def register(user):
@@ -23,22 +23,33 @@ async def register(user):
     """
 
     try:
-        check = await model.findone(
+        check = await Model.findone(
             {"email": user.email},
-            "users",
+            "users_collection"
         )
         if check is not None:
             return {"error": "user already exists"}
         user.password = hashed(user.password)
-        create_user = await model.create(
+        user = UserAccess(**user.dict())
+        create_user = await Model.create(
             jsonable_encoder(user),
-            "users",
+            "users_collection"
+        )
+        access_token = None
+        if create_user:
+            user = await Model.findone({"_id":create_user.inserted_id},"users_collection")
+            access_token = create_access_token(
+                data={
+                    "email":user["email"],
+                },
         )
         return {
             "user_id": create_user.inserted_id,
+            "user": user,
             "success": True,
             "message": "User created successfully",
             "status": 200,
+            "access_token": f"Bearer {access_token}"
         }
     except Exception as error:
         raise HTTPException(
@@ -47,16 +58,16 @@ async def register(user):
         ) from error
 
 
-async def login(load: User_login):
+async def login(load: UserLogin):
     """Login a test taker.
     returns
     -------
     access token and user mail.
     """
     try:
-        user_exists = await model.findone(
+        user_exists = await Model.findone(
             {"email": load.email},
-            "users",
+            "users_collection"
         )
         if not user_exists:
             return {
@@ -99,7 +110,7 @@ async def verifier_login(verifier: Verifier):
     Login for an admin to upload questions
     """
     try:
-        admin = await model.findone(
+        admin = await Model.findone(
             {"email": verifier.email},
             "verifiers",
         )
@@ -148,5 +159,5 @@ async def set_result(category_name, test_results):
     result = {
         f"{category_name}": f"{test_results}",
     }
-    await model.create(result, "user_result")
+    await Model.create(result, "user_results_collection")
     return ResponseModel.success(message="success")

@@ -7,9 +7,9 @@ from src.controller.users_controls import (
     verifier_login,
 )
 from src.schema.users_model import (
-    Test_results,
+    TestResult,
     User,
-    User_login,
+    UserLogin,
     Verifier,
 )
 from src.utils.auth import (
@@ -53,7 +53,7 @@ async def sign_up(new_user: User):
 
 # Test taker login
 @router.post("/login", tags=["users"])
-async def sign_in(details: User_login):
+async def sign_in(details: UserLogin):
     return await login(details)
 
 
@@ -65,7 +65,7 @@ async def user_profile(current_user=Depends(verify_user)):
 
 # category
 @router.post("/profile/{email}/{category}")
-async def test_category(email, category, test_results: Test_results):
+async def test_category(email, category, test_results: TestResult):
     test_results.email = email
     return set_result(category, test_results)
 
