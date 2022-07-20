@@ -6,7 +6,7 @@ from src.service.template import template
 from src.utils.constants import CERTIFICATE_FOLDER_PATH
 
 # create certificates
-async def create_certificate(user_id,skill,level):
+async def create_certificate(certificate_data,current_user):
     """
         Create a certificate
         :param certificate: 
@@ -40,13 +40,22 @@ async def create_certificate(user_id,skill,level):
                 "success":False,
                 "message":"User does not exist",
                 "status":404
-            } if user does not exist
+            } if user does certificateexist
     """
     try:
         # validate that caller is authorized to create a certificate
-        # ---- TODO ---- auth user check
-        # create certificate
-
+        is_verifier = current_user["verifier"]
+        if not is_verifier:
+            return {
+                "success":False,
+                "message":"Unauthorize access",
+                "status":403
+            }
+        
+        certificate_data = certificate_data.dict()
+        user_id = certificate_data["user_id"]
+        skill = certificate_data["skill"]
+        level = certificate_data["level"]
         # check if user exist / registered
         # user = await Model.findone({"_id": user_id}, "users_collection")
         user = {
@@ -143,17 +152,15 @@ async def create_certificate(user_id,skill,level):
             }
 
 # get Certificates of a user
-async def get_certificates(user_id):
+async def get_certificates(current_user):
     """
         Get certificates by user_id
         :param user_id: user_id of certificates
         :return: list of certificates
     """
     try:
-        # validate that caller is authorized /user
-        # ---- TODO ---- auth user check
         # get certificates
-        certificates = await Model.findall({"user_id": user_id}, "certificates_collection")
+        certificates = await Model.findall({"user_id": current_user["_id"]}, "certificates_collection")
         
         return {
             "certificates":certificates,

@@ -64,6 +64,7 @@ class Question(BaseModel):
     question:str
     options: Option
     answer: str
+    mark:float
     duration: float
     category:Category
     set_by: str

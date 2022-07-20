@@ -152,3 +152,105 @@ async def delete_question(question_id):
             "status":500,
             "message":"An error occurred while deleting the question"
             }
+
+# process/mark quiz questions
+async def process_quiz_question(submission_,current_user):
+    """
+        Process submitted   quiz question and answers
+        :param submission: list of quiz questions and user answers
+        :return: 
+            {
+                "success":True,
+                "message":"Results Ready",
+                "score": 19,
+                "test_status":"FAILED",
+                "status":200
+            }
+
+            submission_object={
+                "skill":"REACT",
+                "level":"BEGINNER",
+                "quiz": [
+                    {"question_id":"iw83084308","user_answer":"a"},
+                    {"question_id":"iw8308430822","user_answer":"a"},
+                    ]
+            }
+    """
+    def quiz_question(questions,submission):
+        submitted_ids = [i["question_id"] for i in submission["quiz"]]
+        filtered = []
+        for question in questions:
+            if question["_id"] in submitted_ids:
+                filtered.append(question)
+        return filtered
+
+    def validate_answers(question,submission):
+        scores = []
+        if len(questions) == len(submission):
+            return {
+                "success":False,
+                "message":"Invalid test",
+                "status":422
+            }
+        for quiz in range(len(questions)):
+            if question[quiz]["answer"] == submission[quiz]["user_answer"]:
+                scores.append(question[quiz]["mark"])
+        total_mark = sum(scores)
+        return total_mark
+    try:
+        submission =submission_.keys()
+        # check if there is a submission object
+        if "skill" not in submission.keys():
+            return {
+                "success": False,
+                "message": "Invalid test for a Skill",
+                "status":422
+            }
+        # get all questions for a category
+        questions = await Model.findall({"category": submission["skill"].upper()}, "questions_collection")
+        if len(questions) == 0:
+            return {
+                "success": False,
+                "message": "Invalid test for a Skill",
+                "status":422
+                }
+        filter_questions= quiz_question(questions,submission)
+        total_mark = validate_answers(filter_questions,submission)
+        index = {"BEGINNER":0,"INTERMEDIATE":1,"ADVANCED":2}
+        test_object={
+            "level": submission["level"],
+            "test_result": "FAILED" if total_mark < 65 else "PASSED",
+            "score": total_mark
+        }
+        # update user test result
+        user = await Model.findone({"_id":current_user["_id"]},"users_collection")
+        if user is not None:
+            updated_user ={}
+            for k,v in user.items():
+                if k == "results":
+                    updated_user[k]=v
+                    # if list is empty append test
+                    if len(updated_user[k][submission["skill"].lower()])==0:
+                         updated_user[k][submission["skill"].lower()].append(test_object)
+                    # compare index of elements in the skill area and update the index
+                    if updated_user[k][submission["skill"].lower()][index[submission["level"].upper()]]["level"] == submission["level"].upper():
+
+                else:
+                    updated_user[k]=v
+
+
+        
+            await Model.update(question_id, questions, "questions_collection")
+        return {
+            "question_id":question_id,
+            "success":False,
+            "message":"Question does not exist",
+            "status":404
+            }
+    except Exception as error:
+        return {
+            "error": f'{error}',
+            "success":False,
+            "status":500,
+            "message":"An error occurred while deleting the question"
+            }

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from src.schema.questions_model import Question,UpdateQuestion
-from src.controller.question_controls import get_questions, create_question, update_question, delete_question
+from src.controller.question_controls import get_questions, create_question, update_question, delete_question,process_quiz_question
 
 router = APIRouter()
 #create questions
@@ -23,3 +23,8 @@ async def _update_question(question_id, question: UpdateQuestion):
 @router.delete("/{question_id}")
 async def _delete_question(question_id):
     return await delete_question(question_id) 
+
+# get results
+@router.post("/")
+async def _process_results(submission_: dict,current_user:User=Depends(verify_user)):
+    return await process_quiz_question(submission_,current_user)
