@@ -12,8 +12,8 @@ async def create_question(question: Question,current_user):
     """
     try:
         # validate that caller is authorized to create a question
-        # ---- TODO ---- auth user  # validate that caller is authorized to create a certificate
-        is_verifier = current_user["verifier"]
+        is_verifier = current_user["is_verifier"]
+
         if not is_verifier:
             return {
                 "success":False,
@@ -92,7 +92,7 @@ async def update_question(question_id, question: UpdateQuestion,current_user):
     """
     try:
         # validate that caller is authorized to update a question
-        is_verifier = current_user["verifier"]
+        is_verifier = current_user["is_verifier"]
         if not is_verifier:
             return {
                 "success":False,
@@ -140,7 +140,8 @@ async def delete_question(question_id,current_user):
     """
     try:
         # validate that caller is authorized to delete a question
-        is_verifier = current_user["verifier"]
+        is_verifier = current_user["is_verifier"]
+        
         if not is_verifier:
             return {
                 "success":False,

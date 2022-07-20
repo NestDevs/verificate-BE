@@ -43,7 +43,10 @@ class User(BaseModel):
     results: dict[str, list[TestResult]] = None
     created_at: str = str(datetime.now(timezone.utc))
 
-
+class UserAccess(User):
+    """Model to assign access to user"""
+    is_verifier: bool = False
+    is_admin: bool = False
 class UserLogin(BaseModel):
     """
     Model to collect user login details.

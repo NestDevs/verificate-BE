@@ -44,7 +44,7 @@ async def create_certificate(certificate_data,current_user):
     """
     try:
         # validate that caller is authorized to create a certificate
-        is_verifier = current_user["verifier"]
+        is_verifier = current_user["is_verifier"]
         if not is_verifier:
             return {
                 "success":False,
