@@ -68,3 +68,32 @@ questions = [question,question1,question2]
 
 filtered = quiz_question(questions=questions,submission=submission_object)
 print(filtered)
+
+user = {
+           "first_name":"John",
+            "last_name":"Doe",
+            "email":"johndoe@gmail.com",
+            "password":"123456789",
+            "linked_in":"https://www.linkedin.com/in/johndoe",
+            "results":{
+                "java":[
+                    {
+                        "level":"BEGINNER",
+                        "test_result":"FAILED",
+                        "score":10
+                    },
+                    {
+                        "level":"INTERMEDIATE",
+                        "test_result":"PASSED",
+                        "score":70
+                    },
+                    {
+                        "level":"ADVANCED",
+                        "test_result":"FAILED",
+                        "score":40
+                    }
+
+                ]
+            }
+            
+        }

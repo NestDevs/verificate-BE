@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     CONTRACT_ADDRESS = os.getenv("CONTRACT_ADDRESS")
     OWNER_ACCOUNT = os.getenv("OWNER_ACCOUNT")
     OWNER_ACCOUNT_PRIVATE_KEY = os.getenv("OWNER_ACCOUNT_PRIVATE_KEY")
+    SECRET_KEY2 = os.getenv("SECRET_KEY2")
+    ALGORITHM = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES = 200
 
 
 settings = Settings()

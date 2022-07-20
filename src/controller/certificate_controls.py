@@ -28,7 +28,7 @@ async def create_certificate(certificate_data,current_user):
             "success":False,
             "status":500,
             "message":"An error occurred while creating the certificate"
-            } if unsuccessful
+            } if unsuccessful 
 
             {
                 "success":False,
@@ -57,35 +57,8 @@ async def create_certificate(certificate_data,current_user):
         skill = certificate_data["skill"]
         level = certificate_data["level"]
         # check if user exist / registered
-        # user = await Model.findone({"_id": user_id}, "users_collection")
-        user = {
-           "first_name":"John",
-            "last_name":"Doe",
-            "email":"johndoe@gmail.com",
-            "password":"123456789",
-            "linked_in":"https://www.linkedin.com/in/johndoe",
-            "results":{
-                "java":[
-                    {
-                        "level":"BEGINNER",
-                        "test_result":"FAILED",
-                        "score":10
-                    },
-                    {
-                        "level":"INTERMEDIATE",
-                        "test_result":"PASSED",
-                        "score":70
-                    },
-                    {
-                        "level":"ADVANCED",
-                        "test_result":"FAILED",
-                        "score":40
-                    }
-
-                ]
-            }
-            
-        }
+        user = current_user
+  
         if user is None:
             return {
                 "success":False,

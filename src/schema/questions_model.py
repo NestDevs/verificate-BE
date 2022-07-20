@@ -57,7 +57,7 @@ class Option(BaseModel):
     c:str
     d:str
 class Question(BaseModel):
-    """Base model to hold question data."""
+    """Base model to hold question meta data."""
 
     test_name: str = Field(min_length=5)
     skill_level: Level
@@ -69,6 +69,7 @@ class Question(BaseModel):
     category:Category
     set_by: str
     uploaded_at: str = str(datetime.now(timezone.utc))
+    
 
     class Config:
         """question model configuration."""
@@ -99,6 +100,7 @@ class UpdateQuestion(BaseModel):
     question:Optional[str]
     options: Optional[Option]
     answer: Optional[str]
+    mark:float
     duration: Optional[float]
     category:Optional[Category]
    

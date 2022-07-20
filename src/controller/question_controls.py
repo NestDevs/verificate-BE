@@ -1,11 +1,10 @@
 # for the questions controller
 from src.schema.questions_model import Question,Category,UpdateQuestion
 from src.utils.functions import Model
-import json
 import random
 
 # create questions
-async def create_question(question: Question):
+async def create_question(question: Question,current_user):
     """
         Create a question
         :param question: Question object
@@ -13,7 +12,14 @@ async def create_question(question: Question):
     """
     try:
         # validate that caller is authorized to create a question
-        # ---- TODO ---- auth user check
+        # ---- TODO ---- auth user  # validate that caller is authorized to create a certificate
+        is_verifier = current_user["verifier"]
+        if not is_verifier:
+            return {
+                "success":False,
+                "message":"Unauthorize access",
+                "status":403
+            }
         # create question
         question = question.dict()
         question_exist = await Model.findone({"question": question["question"]}, "questions_collection")
@@ -77,7 +83,7 @@ async def get_questions(category: Category = "GENERAL", number_of_questions: int
             }
 
 # update questions
-async def update_question(question_id, question: UpdateQuestion):
+async def update_question(question_id, question: UpdateQuestion,current_user):
     """
         Update a question
         :param question_id: id of question to update
@@ -86,7 +92,13 @@ async def update_question(question_id, question: UpdateQuestion):
     """
     try:
         # validate that caller is authorized to update a question
-        # ---- TODO ---- auth user check
+        is_verifier = current_user["verifier"]
+        if not is_verifier:
+            return {
+                "success":False,
+                "message":"Unauthorize access",
+                "status":403
+            }
         # update question
         
         question_exist = await Model.findone({"_id": question_id}, "questions_collection")
@@ -120,7 +132,7 @@ async def update_question(question_id, question: UpdateQuestion):
             }
   
 # delete questions
-async def delete_question(question_id):
+async def delete_question(question_id,current_user):
     """
         Delete a question
         :param question_id: id of question to delete
@@ -128,7 +140,13 @@ async def delete_question(question_id):
     """
     try:
         # validate that caller is authorized to delete a question
-        # ---- TODO ---- auth user check
+        is_verifier = current_user["verifier"]
+        if not is_verifier:
+            return {
+                "success":False,
+                "message":"Unauthorize access",
+                "status":403
+            }
         # delete question
         question_exist = await Model.findone({"_id": question_id}, "questions_collection")
         if question_exist is not None:
@@ -216,41 +234,45 @@ async def process_quiz_question(submission_,current_user):
                 }
         filter_questions= quiz_question(questions,submission)
         total_mark = validate_answers(filter_questions,submission)
-        index = {"BEGINNER":0,"INTERMEDIATE":1,"ADVANCED":2}
+        
+      
+        # update user test result
+        user = await Model.findone({"_id":current_user["_id"]},"users_collection")
+        test_query_object = {
+            "user_id": str(user["_id"]),
+            "category":submission["skill"].upper(),
+            "level": submission["level"].upper()
+        }
         test_object={
+            "user_id": str(user["_id"]),
+            "category":submission["skill"].upper(),
             "level": submission["level"],
             "test_result": "FAILED" if total_mark < 65 else "PASSED",
             "score": total_mark
         }
-        # update user test result
-        user = await Model.findone({"_id":current_user["_id"]},"users_collection")
-        if user is not None:
-            updated_user ={}
-            for k,v in user.items():
-                if k == "results":
-                    updated_user[k]=v
-                    # if list is empty append test
-                    if len(updated_user[k][submission["skill"].lower()])==0:
-                         updated_user[k][submission["skill"].lower()].append(test_object)
-                    # compare index of elements in the skill area and update the index
-                    if updated_user[k][submission["skill"].lower()][index[submission["level"].upper()]]["level"] == submission["level"].upper():
 
-                else:
-                    updated_user[k]=v
-
-
-        
-            await Model.update(question_id, questions, "questions_collection")
-        return {
-            "question_id":question_id,
-            "success":False,
-            "message":"Question does not exist",
-            "status":404
+        test_result = Model.findall(test_query_object,"user_results_collection")
+        if test_result is None:
+            new_test = await Model.create(test_object,"user_results_collection")
+            return {
+                "success":True,
+                "message":"Results Successfully generated",
+                "status":201,
+                "payload":new_test
             }
+        # update test results
+        updated_result = await Model.update(test_object,"user_results_collection")
+        return {
+                "success":True,
+                "message":"Results Successfully generated",
+                "status":201,
+                "payload":updated_result
+            }
+
     except Exception as error:
         return {
             "error": f'{error}',
             "success":False,
             "status":500,
-            "message":"An error occurred while deleting the question"
+            "message":"An error occurred while computting results"
             }
